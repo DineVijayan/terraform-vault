@@ -143,3 +143,23 @@ vault write -f auth/approle/role/my-approle/secret-id
    ```
 
 This command generates a Secret ID and provides it in the response. Save the Secret ID securely, as it will be used for Terraform authentication.
+
+# provider for vault
+provider "vault" {
+    address = "http://15.236.226.217:8200/"
+    skip_child_token = true
+
+    auth_login {
+        path = "auth/approle/login"
+
+        parameters = {
+            role_id = "52e3cfb2-4a5a-d248-8fec-bb96dd8a2aa3"
+            secret_id = "30736a9d-febe-9e98-7614-e6b9e875ac19"
+        }
+    }
+}
+# data_source for vault
+data "vault_kv_secret_v2" "example" {
+  mount = "kv"
+  name  = "data"
+}
